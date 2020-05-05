@@ -22,10 +22,10 @@ module.exports = (injectedStore) => {
       username: data.username,
     }
 
-    if (!data.id) {
-      user.id = nanoid()
-    } else {
+    if (data.id) {
       user.id = data.id
+    } else {
+      user.id = nanoid()
     }
     // console.log(user)
     // console.log('[user]: ', user)
@@ -37,7 +37,6 @@ module.exports = (injectedStore) => {
         password: data.password,
       })
     }
-
     return store.upsert(TABLA, user)
   }
 

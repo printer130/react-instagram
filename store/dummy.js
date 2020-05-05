@@ -16,7 +16,7 @@ const db = {
 }
 
 async function list(tabla) {
-  return await db[tabla]
+  return await db[tabla] || []
 }
 
 async function get(tabla, id) {
@@ -29,7 +29,7 @@ async function upsert(tabla, data) {
     db[tabla] = []
   }
   await db[tabla].push(data)
-  console.log(db)
+  // console.log(db)
 }
 
 async function remove(tabla, id) {
@@ -37,6 +37,8 @@ async function remove(tabla, id) {
 }
 
 async function query(tabla, q) {
+  console.log('[TABLA]', tabla)
+  console.log('[Q]', q)
   let colection = await list(tabla)
   let keys = Object.keys(q)
   let key = keys[0]

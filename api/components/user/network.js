@@ -1,10 +1,19 @@
 const express = require('express')
-const router = express.Router()
-const response = require('../../../network/response')
 
+const secure = require('./secure')
+
+const response = require('../../../network/response')
 const controller = require('./index')
 
-router.get('/', (req, res) => {
+const router = express.Router()
+
+router.get('/', list)
+router.get('/:id', get)
+router.post('/', upsert)
+router.put('/', secure('update'), updated) //CHEKEAR ERROR
+router.delete('/:id', deleted)
+
+function list(req, res) {
   controller
     .list()
     .then((lista) => {
@@ -13,9 +22,9 @@ router.get('/', (req, res) => {
     .catch((e) => {
       response.error(req, res, e, 500)
     })
-})
+}
 
-router.get('/:id', (req, res) => {
+function get(req, res) {
   const id = req.params.id
   controller
     .get(id)
@@ -25,9 +34,9 @@ router.get('/:id', (req, res) => {
     .catch((e) => {
       response.error(req, res, e, 500)
     })
-})
+}
 
-router.post('/', (req, res) => {
+function upsert(req, res) {
   const { body } = req
   controller
     .post(body)
@@ -37,9 +46,9 @@ router.post('/', (req, res) => {
     .catch((e) => {
       response.error(req, res, e, 500)
     })
-})
+}
 
-router.delete('/:id', (req, res) => {
+function deleted(req, res) {
   const { id } = req.params
   controller
     .borrado(id)
@@ -49,6 +58,17 @@ router.delete('/:id', (req, res) => {
     .catch((e) => {
       response.error(req, res, e, 500)
     })
-})
+}
+
+function updated(req, res) {
+  controller
+    .post(req.body)
+    .then((user) => {
+      response.success(req, res, user, 201)
+    })
+    .catch((e) => {
+      response.error(req, res, e, 500)
+    })
+}
 
 module.exports = router

@@ -1,5 +1,6 @@
 exports.success = (req, res, message, status) => {
   let statusCode = status || 200
+  // console.log('message:,', message)
   res.status(statusCode).send({
     error: false,
     status: status,

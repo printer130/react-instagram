@@ -10,12 +10,13 @@ module.exports = (injectedStore) => {
 
   async function login(username, password) {
     const data = await store.query(TABLA, { username: username })
-    console.log('[DATA---DATA]:', data)
-    if (data.password === password) {
-      return auth.sign(data)
-    } else {
-      throw new Error('password invalido')
-    }
+    return bcrypt.compare(password, data.password).then((iguales) => {
+      if (iguales === true) {
+        return auth.sign(data)
+      } else {
+        return new Error('password invalido')
+      }
+    })
   }
 
   async function upsert(data) {
@@ -30,7 +31,9 @@ module.exports = (injectedStore) => {
 
     if (data.password) {
       authData.password = await bcrypt.hash(data.password, 5)
+      // authData.password = data.password
     }
+    // console.log('[authData]:', authData)
     return store.upsert(TABLA, authData)
   }
 

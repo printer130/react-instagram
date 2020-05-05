@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon ./api/index",
+    "server": "nodemon api",
     "build": "webpack",
     "dev": "webpack-dev-server"
   },
