@@ -1,19 +1,21 @@
 const { nanoid } = require('nanoid')
 const TABLA = 'user'
 const auth = require('../auth')
+// const MongoLib = require('../../../store/mongo')
 
-module.exports = (injectedStore) => {
-  let store = injectedStore
-  if (!store) {
-    store = require('../../../store/dummy')
+module.exports = (InjectedStore) => {
+  let store = new InjectedStore()
+  // console.log(store)
+  // if (!store) {
+  //   store = require('../../../store/dummy')
+  // }
+
+  async function list() {
+    return await store.list(TABLA)
   }
 
-  function list() {
-    return store.list(TABLA)
-  }
-
-  function get(id) {
-    return store.get(TABLA, id)
+  async function get(id) {
+    return await store.get(TABLA, id)
   }
 
   async function post(data) {
@@ -21,14 +23,17 @@ module.exports = (injectedStore) => {
       name: data.name,
       username: data.username,
     }
+    console.log(null)
+    let notAvailableUser = await store.query(TABLA, { username: user.username })
+    if (notAvailableUser) {
+      throw new Error('Usuario invalido')
+    }
 
     if (data.id) {
       user.id = data.id
     } else {
       user.id = nanoid()
     }
-    // console.log(user)
-    // console.log('[user]: ', user)
 
     if (data.password || data.username) {
       await auth.upsert({
@@ -40,8 +45,8 @@ module.exports = (injectedStore) => {
     return store.upsert(TABLA, user)
   }
 
-  function borrado(id) {
-    return store.remove(TABLA, id)
+  async function borrado(id) {
+    return await store.remove(TABLA, id)
   }
 
   return {

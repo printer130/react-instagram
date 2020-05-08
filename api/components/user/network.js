@@ -14,6 +14,7 @@ router.put('/', secure('update'), updated) //CHEKEAR ERROR
 router.delete('/:id', deleted)
 
 function list(req, res) {
+  console.log('QUERIES', req.query)
   controller
     .list()
     .then((lista) => {

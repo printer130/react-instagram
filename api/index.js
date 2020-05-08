@@ -5,7 +5,9 @@ const config = require('../config')
 const user = require('./components/user/network')
 const auth = require('./components/auth/network')
 
+
 const app = express()
+
 
 //MIDDLEWARES
 app.use(express.urlencoded({ extended: true }))

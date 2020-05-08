@@ -9,12 +9,10 @@ function sign(data) {
 const check = {
   own: (req, owner) => {
     const decoded = decodedHeader(req)
-    // console.log('[DECODED]', decoded)
-    // console.log('[OWNDER]', owner)
     console.log('DECODED', decoded)
-    // if (decoded.id !== owner) {
-    //   throw new Error('no puedes hacer esto')
-    // }
+    if (decoded.id !== owner) {
+      throw new Error('no puedes hacer esto')
+    }
   },
 }
 

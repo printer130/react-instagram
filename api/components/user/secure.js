@@ -2,8 +2,8 @@ const auth = require('../../../auth')
 
 module.exports = function checkAuth(action) {
   function middleware(req, res, next) {
-    console.table('[REQ]:', req)
-    console.table('[REs]:', res)
+    console.table('*******************************************')
+    // console.table('[REs]:', res)
     switch (action) {
       case 'update':
         const owner = req.body.id
